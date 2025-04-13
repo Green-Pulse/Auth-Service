@@ -28,7 +28,7 @@ public class KeycloakService {
     private final Keycloak keycloak;
     private final String realm;
     private final KeycloakTokenClient tokenClient;
-    private final KafkaTemplate<String, UserRegisteredEvent> kafkaTemplate; //TODO жёсткая типизация, нужно исправитьь на Object что бы была поддержка сериализации
+    private final KafkaTemplate<String, UserRegisteredEvent> kafkaTemplate;
     private final KafkaTemplate<String, UserLoginedEvent> loginedKafkaTemplate;
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 

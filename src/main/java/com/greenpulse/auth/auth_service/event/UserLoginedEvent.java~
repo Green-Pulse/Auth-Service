@@ -1,0 +1,4 @@
+package com.greenpulse.auth.auth_service.event;
+
+public class UserLoginedEvent {
+}

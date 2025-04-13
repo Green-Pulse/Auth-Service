@@ -1,5 +1,6 @@
 package com.greenpulse.auth.auth_service.config;
 
+import com.greenpulse.auth.auth_service.event.UserLoginedEvent;
 import com.greenpulse.auth.auth_service.event.UserRegisteredEvent;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -27,6 +28,15 @@ public class KafkaConfig {
                 .build();
     }
 
+    @Bean
+    NewTopic createLoginTopic() {
+        return TopicBuilder.name("user-logged-in-event-topic")
+                .partitions(3)
+                .replicas(3)
+                .config("min.insync.replicas", "2")
+                .build();
+    }
+
 
     @Bean
     public ProducerFactory<String, UserRegisteredEvent> producerFactory() {
@@ -44,5 +54,25 @@ public class KafkaConfig {
     @Bean
     public KafkaTemplate<String, UserRegisteredEvent> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
+    }
+
+    // ProducerFactory для UserLoginedEvent
+    @Bean
+    public ProducerFactory<String, UserLoginedEvent> loginProducerFactory() {
+        Map<String, Object> configProps = new HashMap<>();
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "[::1]:9092,[::1]:9094,[::1]:9096");
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+
+        // avoid classloader issues
+        configProps.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, false);
+
+        return new DefaultKafkaProducerFactory<>(configProps);
+    }
+
+    // KafkaTemplate для UserLoginedEvent
+    @Bean
+    public KafkaTemplate<String, UserLoginedEvent> loginedKafkaTemplate() {
+        return new KafkaTemplate<>(loginProducerFactory());
     }
 }
