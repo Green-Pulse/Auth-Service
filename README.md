@@ -128,3 +128,8 @@ This service can produce Kafka events such as **user registration** and perform 
 - [ ] Add unit tests for user role logic
 - [ ] Add Swagger/OpenAPI documentation (optional)
 - [ ] Monitoring
+
+
+## 📄 License
+
+This project is licensed under the [Apache License 2.0](LICENSE).
