@@ -3,33 +3,21 @@ server:
 
 spring:
   kafka:
+    bootstrap-servers: kafka-1:9092,kafka-2:9095,kafka-3:9098
     producer:
-      bootstrap-servers: "[::1]:9092, [::1]:9094, [::1]:9096"
-      key.serializer: org.apache.kafka.common.serialization.StringSerializer
-      value.serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   application:
     name: AuthService
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8180/realms/greenpulse
-  datasource:
-    url: jdbc:postgresql://${DATABASE_HOST:localhost}:${DATABASE_PORT:5432}/${DATABASE_NAME:greenpulse}
-    username: ${DATABASE_USERNAME:admin}
-    password: ${DATABASE_PASSWORD:admin}
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+          issuer-uri: http://keycloak:8080/realms/greenpulse
+
 keycloak:
   realm: greenpulse
-  auth-server-url: http://localhost:8180
+  auth-server-url: http://keycloak:8080
   resource: greenpulseclient
   public-client: true
   bearer-only: true
